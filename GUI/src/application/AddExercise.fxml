@@ -96,7 +96,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="519.0" prefWidth="598.0">
                                        <children>
-                                          <ListView fx:id="exerciseType" prefHeight="519.0" prefWidth="256.0" />
+                                          <ListView fx:id="exerciseType" onMouseClicked="#loadExercises" prefHeight="519.0" prefWidth="256.0" />
                                           <ListView fx:id="exerciseName" prefHeight="519.0" prefWidth="256.0" />
                                        </children>
                                     </HBox>

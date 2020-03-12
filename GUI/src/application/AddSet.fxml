@@ -3,21 +3,18 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AddExerciseController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AddSetController">
    <children>
       <MenuBar>
          <menus>
@@ -71,40 +68,53 @@
             </HBox>
          </bottom>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="Add New Exercise">
+                        <Label fx:id="exerciseName" text="Label">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="18.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#selectExercise" text="Button" />
-                        <Region prefHeight="100.0" prefWidth="42.0" />
-                        <TextField fx:id="searchBar" prefHeight="25.0" prefWidth="270.0" promptText="Search..." />
                      </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                      <padding>
-                        <Insets right="10.0" />
+                        <Insets left="20.0" />
                      </padding>
                   </HBox>
-                  <ScrollPane prefHeight="536.0" prefWidth="600.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="537.0" prefWidth="598.0">
-                           <children>
-                              <VBox fx:id="exerciseVBox" prefHeight="537.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="519.0" prefWidth="598.0">
-                                       <children>
-                                          <ListView fx:id="exerciseType" onMouseClicked="#loadExercises" prefHeight="519.0" prefWidth="256.0" />
-                                          <ListView fx:id="exerciseName" prefHeight="519.0" prefWidth="256.0" />
-                                       </children>
-                                    </HBox>
-                                 </children></VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                  <Label text="Weight">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="68.0" prefWidth="600.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="weightDecrease" mnemonicParsing="false" text="-" />
+                        <TextField fx:id="weightField" alignment="CENTER" text="0" />
+                        <Button fx:id="weightIncrease" mnemonicParsing="false" text="+" />
+                     </children>
+                  </HBox>
+                  <Label text="Reps">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="64.0" prefWidth="600.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="repsDecrease" mnemonicParsing="false" text="-" />
+                        <TextField fx:id="repsField" alignment="CENTER" text="0" />
+                        <Button fx:id="repsIncrease" mnemonicParsing="false" text="+" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="70.0" prefWidth="600.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="addSet" mnemonicParsing="false" text="Add Set" />
+                     </children>
+                  </HBox>
+                  <ScrollPane fx:id="scrollPane" prefHeight="337.0" prefWidth="600.0" />
                </children>
             </VBox>
          </center>

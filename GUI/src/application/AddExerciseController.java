@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,15 +23,16 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Data;
 import model.Exercise;
 import model.ExerciseList;
+import model.Routine;
+import model.RoutineTracker;
 import model.Set;
 
-public class AddExerciseController implements Initializable {
+public class AddExerciseController {
 
-	private ExerciseList exerciseList;
-	private Exercise exercise;
-	private VBox exerciseBox;
+	private Data data;
 
 	@FXML
 	private TextField searchBar;
@@ -39,56 +41,76 @@ public class AddExerciseController implements Initializable {
 	@FXML
 	private ListView<String> exerciseName;
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		exerciseType.getItems().addAll("Back", "Chest", "Shoulders", "Biceps", "Triceps", "Abs", "Legs", "Cardio");
 
+	
+	public void initData(Data data) {
+		this.exerciseType.getItems().addAll("Back", "Chest", "Shoulders", "Biceps", "Triceps", "Abs", "Legs", "Cardio");
+		this.data = data;
 	}
 
 	public void selectExercise(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("CreateRoutine.fxml"));
-		Parent routineView = loader.load();
+		
+		if (this.exerciseName.getSelectionModel().getSelectedItem() != null) {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("CreateRoutine.fxml"));
+			Parent routineView = loader.load();
 
-		CreateRoutineController controller = loader.getController();
-		
-		exercise = new Exercise("Pull Up", "Back");
-		exercise.addSet(new Set(10, 100));
-		exercise.addSet(new Set(9, 110));
-		exercise.addSet(new Set(5, 10));
-		
-		exerciseBox = new VBox(10);
-		
-		exerciseBox.getChildren().add(new Label(exercise.getExerciseName()));
-		exerciseBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		
-		exerciseBox.setAlignment(Pos.CENTER);
-		
-		for (Set set : exercise.getSetList()) {
-			exerciseBox.getChildren().add(new Label(set.toString()));
+			CreateRoutineController controller = loader.getController();
+			
+			this.data.setExercise(new Exercise(this.exerciseName.getSelectionModel().getSelectedItem(), this.exerciseType.getSelectionModel().getSelectedItem())); 
+						
+			controller.initData(data);
+			controller.addExercise(this.data.getExercise());
+			
+			Scene scene = new Scene(routineView);
+
+			Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+			window.setScene(scene);
+			window.show();
+		}
+	}
+
+	public void loadExercises() {
+		if (this.exerciseName.getItems().size() != 0) {
+			this.exerciseName.getItems().remove(0, this.exerciseName.getItems().size());
 		}
 
-		if (exercise != null && exerciseBox != null) {
-			controller.addExercise(exercise, exerciseBox);
-		}
-		
-		
-		Scene scene = new Scene(routineView);
-		
-		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-		
-		window.setScene(scene);
-		window.show();
+		if (this.exerciseType.getSelectionModel().getSelectedItem().equals("Back")) {
+			for (int i = 0; i < this.data.getExerciseList().getBackExercises().size(); i++) {
+				this.exerciseName.getItems().add(this.data.getExerciseList().getBackExercises().get(i).getExerciseName());
+			}
+		} else if (this.exerciseType.getSelectionModel().getSelectedItem().equals("Chest")) {
 
+			for (int i = 0; i < this.data.getExerciseList().getChestExercises().size(); i++) {
+				this.exerciseName.getItems().add(this.data.getExerciseList().getChestExercises().get(i).getExerciseName());
+			}
+		} else if (this.exerciseType.getSelectionModel().getSelectedItem().equals("Legs")) {
+
+			for (int i = 0; i < this.data.getExerciseList().getLegsExercises().size(); i++) {
+				this.exerciseName.getItems().add(this.data.getExerciseList().getLegsExercises().get(i).getExerciseName());
+			}
+		} else if (this.exerciseType.getSelectionModel().getSelectedItem().equals("Shoulders")) {
+
+			for (int i = 0; i < this.data.getExerciseList().getShouldersExercises().size(); i++) {
+				this.exerciseName.getItems().add(this.data.getExerciseList().getShouldersExercises().get(i).getExerciseName());
+			}
+		}
+	}
+	
+	public void addSet() {
+		if (this.exerciseName.getSelectionModel().getSelectedItem() != null) {
+			
+		}
 	}
 
 	public void homeButton(ActionEvent event) throws IOException {
-		
+
 		Parent home = FXMLLoader.load(getClass().getResource("GUI.fxml"));
 		Scene homeScreen = new Scene(home);
-		
-		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-		
+
+		Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
 		window.setScene(homeScreen);
 		window.show();
 	}

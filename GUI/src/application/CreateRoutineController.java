@@ -30,16 +30,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Data;
 import model.Exercise;
 import model.ExerciseList;
 import model.Routine;
 import model.RoutineTracker;
 import model.Set;
 
-public class CreateRoutineController implements Initializable {
+public class CreateRoutineController {
 	
-	private RoutineTracker routineTracker;
-	private Routine routine;
+	private Data data;
 
 	@FXML
 	private ListView<String> exerciseTypes;
@@ -50,11 +50,15 @@ public class CreateRoutineController implements Initializable {
 	@FXML
 	private Label routineDate;
 
+	public void initData(Data data) {
+		this.data = data;
+		this.routineDate.setText(this.data.getRoutine().getStartTime().toString().substring(0, 10));
+	}
+	
 	public void homeButton(ActionEvent event) throws IOException {
 		
-		if(this.routine.getExerciseArrayList().size() != 0) {
-			this.routineTracker.addRoutine(this.routine);
-			
+		if(this.data.getRoutine().getExerciseArrayList().size() != 0) {
+			this.data.getRoutineTracker().addRoutine(this.data.getRoutine());			
 		}
 		
 		Parent home = FXMLLoader.load(getClass().getResource("GUI.fxml"));
@@ -67,12 +71,19 @@ public class CreateRoutineController implements Initializable {
 	}
 	
 	public void pushAddButton(ActionEvent event) throws IOException {
-		Parent parent = FXMLLoader.load(getClass().getResource("AddExercise.fxml"));
-		Scene scene = new Scene(parent);
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("AddExercise.fxml"));
+		Parent routineView = loader.load();
+		
+		Scene newRoutineScene = new Scene(routineView);
+		
+		AddExerciseController controller = loader.getController();
+		
+		controller.initData(this.data);
 		
 		Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
 		
-		window.setScene(scene);
+		window.setScene(newRoutineScene);
 		window.show();
 	}
 	
@@ -80,46 +91,26 @@ public class CreateRoutineController implements Initializable {
 	 * Pushes the "Add Exercise" Button
 	 *
 	 */
-	public void addExercise(Exercise exercise, VBox exerciseBox) {
+	public void addExercise(Exercise exercise) {
 		
-		routine.addExercise(exercise);
+		this.data.getRoutine().addExercise(exercise);
 		
-		exerciseVBox.getChildren().add(exerciseBox);
+		for(Exercise current : this.data.getRoutine().getExerciseArrayList()) {
+			VBox exerciseBox = new VBox(10);
+			exerciseBox.getChildren().add(new Label(current.getExerciseName()));
+			exerciseBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+			exerciseBox.setAlignment(Pos.CENTER);
+			
+			for (Set set : current.getSetList()) {
+				VBox setBox = new VBox(10);
+				setBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+				setBox.setAlignment(Pos.CENTER);
+				setBox.getChildren().add(new Label(set.toString()));
+				exerciseBox.getChildren().add(setBox);
+			}
+			
+			this.exerciseVBox.getChildren().add(exerciseBox);
+		}
 		
-	}
-	
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		this.routine = new Routine();
-		
-
-		
-		routineDate.setText(this.routine.getStartTime().toString().substring(0, 10));
-		
-		/*
-		 * Exercise exercise = new Exercise("Pull Up", "Back"); exercise.addSet(new
-		 * Set(10, 100)); exercise.addSet(new Set(9, 110)); exercise.addSet(new Set(5,
-		 * 10));
-		 * 
-		 * VBox exerciseBox = new VBox(10);
-		 * 
-		 * exerciseBox.getChildren().add(new Label(exercise.getExerciseName()));
-		 * exerciseBox.setBackground(new Background(new BackgroundFill(Color.WHITE,
-		 * CornerRadii.EMPTY, Insets.EMPTY)));
-		 * 
-		 * exerciseBox.setAlignment(Pos.CENTER);
-		 * 
-		 * for (Set set : exercise.getSetList()) { exerciseBox.getChildren().add(new
-		 * Label(set.toString())); }
-		 * 
-		 * exerciseVBox.getChildren().add(exerciseBox);
-		 */
-		
-	}
-	
-	
-	
-	
-	
+	}	
 }
